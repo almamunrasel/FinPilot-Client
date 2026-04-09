@@ -1,12 +1,66 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FaEyeSlash } from "react-icons/fa";
 import { PiEyesBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
+import useAuth from "../hooks/useAuth";
 
 const RegistrationPage = () => {
   const [show, setShow] = useState(false);
+  const [error,setError]=useState('');
+  const [success,setSuccess]=useState('');
+  const {register,setLoading}=useAuth();
+  const navigate = useNavigate();
+  // const location = useLocation();
+  // const from = location.state?.from?.pathname || "/";
+  
+  const passwordRegex =
+  /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
+  
+  const handleRegister=async(e)=>{
+    e.preventDefault();
+    const name=e.target.name.value;
+    const photoURL=e.target.photoURL.value;
+    const email = e.target.email.value;
+    const password=e.target.password.value;
+    const terms= e.target.terms.checked;
+    console.log(name,photoURL,email,password);
+    if (!passwordRegex.test(password)) {
+      return setError("Password must be one uppercase,one lowercase and 6 characters");
+    }
+    setError('');
+    setSuccess(false);
+    if(!terms){
+      setError('please accept our terms and conditions');
+      return;
+    }
+    setSuccess(false);
+    if(!terms){
+      setError('please accept our terms and conditions');
+      return;
+    }
+    try{
+      await register({name,photoURL,email,password});
+      setSuccess(true);
+      e.target.reset();
+      // navigate('/');
+
+
+    }catch(err){
+      setError(err.response?.data?.message || "Registration failed. Try again.");
+
+    } finally{
+      setLoading(false);
+      
+    }
+    
+
+
+
+  
+
+  }
 
   return (
     <motion.div
@@ -49,70 +103,87 @@ const RegistrationPage = () => {
           <p className="text-center text-sm md:text-lg mb-6">
             Have an Account?{" "}
             <span className="text-blue-600 hover:text-blue-900 cursor-pointer">
-              <Link to='/auth/registration'>Log in.</Link>
+              <Link to='/auth/login'>Log in.</Link>
             </span>
           </p>
 
-          <form className="space-y-4">
-            <div>
-              <label className="label">Your name</label>
-              <input
-                type="text"
-                className="input input-bordered w-full"
-                placeholder="enter your name"
-                required
-              />
-            </div>
-            <div>
-              <label className="label">Photo Url</label>
-              <input
-                type="text"
-                className="input input-bordered w-full"
-                placeholder="enter your photo url"
-                required
-              />
-            </div>
-            <div>
-              <label className="label">Email</label>
-              <input
-                type="email"
-                className="input input-bordered w-full"
-                placeholder="Email"
-                required
-              />
-            </div>
+          <form onSubmit={handleRegister} className="space-y-4 ">
+                    <div>
+                      <label className="label text-black font-semibold">Your name</label>
+                      <input
+                        type="text"
+                        name="name"
+                        className="input input-bordered w-full"
+                        placeholder="enter your name"
+                        required
+                      />
+                    </div>
+                    <div> 
+                      <label className="label text-black font-semibold">Photo Url</label>
+                      <input
+                        type="text"
+                        name="photoURL"
+                        className="input input-bordered w-full"
+                        placeholder="enter your photo url"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="label text-black font-semibold">Email</label>
+                      <input
+                        type="email"
+                        name="email"
+                        className="input input-bordered w-full"
+                        placeholder="Email"
+                        required
+                      />
+                    </div>
 
-            <div>
-              <label className="label">Password</label>
+                    <div>
+                      <label className="label text-black font-semibold">Password</label>
 
-              <div className="relative">
-                <input
-                  type={show ? "text" : "password"}
-                  className="input input-bordered w-full"
-                  placeholder="Password"
-                  required
-                />
+                      <div className="relative">
+                        <input
+                          type={show ? "text" : "password"}
+                          name="password"
+                          className="input input-bordered w-full"
+                          placeholder="Password"
+                          required
+                        />
 
-                <button
-                  type="button"
-                  onClick={() => setShow(!show)}
-                  className="absolute top-3 right-4"
-                >
-                  {show ? <FaEyeSlash /> : <PiEyesBold />}
-                </button>
-              </div>
-            </div>
+                        <button
+                          type="button"
+                          onClick={() => setShow(!show)}
+                          className="absolute top-3 right-4"
+                        >
+                          {show ? <FaEyeSlash /> : <PiEyesBold />}
+                        </button>
+                      </div>
+                      
+                    </div>
+                    <div>
+                      <label class="label text-black font-semibold">
+                          <input type="checkbox" name='terms'  class="checkbox" />
+                          Accept Our <span className="text-blue-500 hover:text-blue-900">terms</span> and <span className="text-blue-500 hover:text-blue-900">Conditions</span>
+                      </label>
+                      {
+                         error && <p className='text-red-400'>{error}</p>
+                      }
 
-          
+                  </div>
 
-            <button
-              type="submit"
-              className="btn bg-blue-700 hover:bg-blue-900 text-white w-full"
-            >
-              Sign Up
-            </button>
+                  
 
-           <p className="text-center"><hr /></p>
+                    <button
+                      type="submit"
+                      className="btn bg-blue-700 hover:bg-blue-900 text-white w-full"
+                    >
+                      Sign Up
+                    </button>
+                  {
+                  success && <p className='text-green-400'> you have been registered successfully !!</p>
+                  }
+                  <p className="text-center"><hr /></p>
           </form>
 
           <div className="pt-5">

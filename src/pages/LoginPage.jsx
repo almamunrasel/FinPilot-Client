@@ -1,12 +1,44 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FaEyeSlash } from "react-icons/fa";
 import { PiEyesBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
+import useAuth from "../hooks/useAuth";
 
 const LoginPage = () => {
   const [show, setShow] = useState(false);
+  const {login,setLoading}=useAuth();
+   const [error,setError]=useState('');
+  const [success,setSuccess]=useState('');
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/dashboard";
+
+  const handleLogin=async(e)=>{
+    e.preventDefault();
+    setError("");
+    setLoading(true);   
+    const email=e.target.email.value;
+    const password=e.target.password.value;
+    try{
+      await login({email,password});
+      setSuccess(true);
+      e.target.reset();
+      // navigate(from, { replace: true });
+
+        
+    }catch(err){
+      setError(err.response?.data?.message || "Login failed. Try again.");
+    }finally{
+      setLoading(false);
+    }
+
+
+  }
+
+
 
   return (
     <motion.div
@@ -53,11 +85,12 @@ const LoginPage = () => {
             </span>
           </p>
 
-          <form className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="label">Email</label>
               <input
                 type="email"
+                name="email"
                 className="input input-bordered w-full"
                 placeholder="Email"
                 required
@@ -70,6 +103,7 @@ const LoginPage = () => {
               <div className="relative">
                 <input
                   type={show ? "text" : "password"}
+                  name="password"
                   className="input input-bordered w-full"
                   placeholder="Password"
                   required
@@ -100,6 +134,10 @@ const LoginPage = () => {
             >
               Login
             </button>
+             {
+                  error && <p className='text-red-500'>{error}</p>
+              }
+               
 
             <p className="text-center text-sm pt-3">
               Don’t Have An Account?{" "}
@@ -110,6 +148,9 @@ const LoginPage = () => {
                 Register
               </Link>
             </p>
+             {
+              success && <p className='text-green-400'> you have been loggin in succesfully</p>
+              }
           </form>
 
           <div className="pt-5">
