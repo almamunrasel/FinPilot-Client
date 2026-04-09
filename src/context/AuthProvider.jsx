@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 import axios from 'axios';
+import {  getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+import app from '../firebase/firebase.config';
 
 const AuthProvider = ({children}) => {
 
@@ -8,7 +11,11 @@ const AuthProvider = ({children}) => {
   const [loading,setLoading]=useState(true);
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  console.log(BASE_URL);
+  const firebaseAuth=getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  
+  
+  
 
   useEffect(()=>{
     const storedUser=localStorage.getItem("user");
@@ -47,6 +54,16 @@ const AuthProvider = ({children}) => {
     return res.data;
   };
 
+  //google popup login
+
+  const googleSignIn=async()=>{
+     return await signInWithPopup(firebaseAuth,googleProvider);
+    // const token=result.user.getIdToken();
+
+  }
+
+
+
 
 
 
@@ -56,7 +73,7 @@ const AuthProvider = ({children}) => {
   
   
   const authData={
-    user,loading,register,login,setLoading
+    user,loading,register,login,setLoading,googleSignIn
 
   }
   return <AuthContext.Provider value={authData}>

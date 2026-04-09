@@ -8,7 +8,7 @@ import useAuth from "../hooks/useAuth";
 
 const LoginPage = () => {
   const [show, setShow] = useState(false);
-  const {login,setLoading}=useAuth();
+  const {login,setLoading,googleSignIn}=useAuth();
    const [error,setError]=useState('');
   const [success,setSuccess]=useState('');
 
@@ -24,7 +24,7 @@ const LoginPage = () => {
     const password=e.target.password.value;
     try{
       await login({email,password});
-      setSuccess(true);
+      setSuccess('you have been logged in successfully via email and password');
       e.target.reset();
       // navigate(from, { replace: true });
 
@@ -37,6 +37,20 @@ const LoginPage = () => {
 
 
   }
+  const handlegoogleSignIn=async()=>{
+  setError('');
+  try{
+   const res= await googleSignIn();
+    setSuccess('you are succefully logged in via google')
+   console.log(res);
+
+  }catch(err){
+    setError(err,"Google sign-in failed. Try again.");
+
+  }
+  
+
+}
 
 
 
@@ -149,12 +163,12 @@ const LoginPage = () => {
               </Link>
             </p>
              {
-              success && <p className='text-green-400'> you have been loggin in succesfully</p>
+              success && <p className='text-green-400'> {success}</p>
               }
           </form>
 
           <div className="pt-5">
-            <button className="btn w-full">
+            <button onClick={handlegoogleSignIn} className="btn w-full">
               <FcGoogle />
               Sign In With Google
             </button>

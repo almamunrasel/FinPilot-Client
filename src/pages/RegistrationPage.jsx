@@ -10,7 +10,7 @@ const RegistrationPage = () => {
   const [show, setShow] = useState(false);
   const [error,setError]=useState('');
   const [success,setSuccess]=useState('');
-  const {register,setLoading}=useAuth();
+  const {register,setLoading,googleSignIn}=useAuth();
   const navigate = useNavigate();
   // const location = useLocation();
   // const from = location.state?.from?.pathname || "/";
@@ -42,7 +42,7 @@ const RegistrationPage = () => {
     }
     try{
       await register({name,photoURL,email,password});
-      setSuccess(true);
+      setSuccess('you have have been registerd succesfully via email and pass word');
       e.target.reset();
       // navigate('/');
 
@@ -55,12 +55,21 @@ const RegistrationPage = () => {
       
     }
     
+}
+const handlegoogleSignIn=async()=>{
+  setError('');
+  try{
+   const res= await googleSignIn();
+    setSuccess('you are succefully logged in via google')
+   console.log(res);
 
-
-
-  
+  }catch(err){
+    setError(err,"Google sign-in failed. Try again.");
 
   }
+  
+
+}
 
   return (
     <motion.div
@@ -181,13 +190,13 @@ const RegistrationPage = () => {
                       Sign Up
                     </button>
                   {
-                  success && <p className='text-green-400'> you have been registered successfully !!</p>
+                  success && <p className='text-green-400'> {success}</p>
                   }
                   <p className="text-center"><hr /></p>
           </form>
 
           <div className="pt-5">
-            <button className="btn w-full">
+            <button onClick={handlegoogleSignIn} className="btn w-full">
               <FcGoogle />
               Sign In With Google
             </button>
