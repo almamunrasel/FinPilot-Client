@@ -11,7 +11,7 @@ import { Home } from 'lucide-react';
 const homelayout = () => {
   return (
     <div>
-      <section className=''>
+      <section className='sticky top-0 z-50'>
         
         <Navigationbar></Navigationbar>
         

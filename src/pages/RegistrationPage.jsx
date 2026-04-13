@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link,   } from "react-router";
 import { FaEyeSlash } from "react-icons/fa";
 import { PiEyesBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
@@ -11,7 +11,7 @@ const RegistrationPage = () => {
   const [error,setError]=useState('');
   const [success,setSuccess]=useState('');
   const {register,setLoading,googleSignIn}=useAuth();
-  const navigate = useNavigate();
+  
   // const location = useLocation();
   // const from = location.state?.from?.pathname || "/";
   
@@ -64,7 +64,7 @@ const handlegoogleSignIn=async()=>{
    console.log(res);
 
   }catch(err){
-    setError(err,"Google sign-in failed. Try again.");
+    setError(err.message ||"Google sign-in failed. Try again.");
 
   }
   

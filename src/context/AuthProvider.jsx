@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 import axios from 'axios';
-import {  getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {  getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 
 import app from '../firebase/firebase.config';
+
+const axiosSecure=axios.create({
+    baseURL:import.meta.env.VITE_API_BASE_URL
+   })
 
 const AuthProvider = ({children}) => {
 
@@ -11,6 +15,8 @@ const AuthProvider = ({children}) => {
   const [loading,setLoading]=useState(true);
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  
+   
   const firebaseAuth=getAuth(app);
   const googleProvider = new GoogleAuthProvider();
   
@@ -57,25 +63,50 @@ const AuthProvider = ({children}) => {
   //google popup login
 
   const googleSignIn=async()=>{
-     return await signInWithPopup(firebaseAuth,googleProvider);
-    // const token=result.user.getIdToken();
+    const result= await signInWithPopup(firebaseAuth,googleProvider);
+    const idToken =await result.user.getIdToken();
+    const res=await axios.post(`${BASE_URL}/auth/google`,{idToken});
+    saveAuth(res.data);
+    return res.data;
+    
+  }
+  //logout
+
+  const logOut=async()=>{
+    await signOut(firebaseAuth).catch(()=>{});
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+  }
+  const updateProfile=async({name,photoURL})=>{
+    const token=localStorage.getItem("token");
+    const res= await axiosSecure.patch(`/auth/updateprofile`,{
+      name,
+      photoURL
+      },{
+        headers:{
+          Authorization:`Bearer ${token}`,
+        },
+      })
+    const updatedUser=res.data.user;
+    localStorage.setItem("user",JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    return res.data;
+    
 
   }
 
-
-
-
-
-
-
-
-  
-  
   
   const authData={
-    user,loading,register,login,setLoading,googleSignIn
-
-  }
+    user,
+    loading,
+    register,
+    login,
+    setLoading,
+    googleSignIn,
+    logOut,
+    updateProfile
+    }
   return <AuthContext.Provider value={authData}>
     {children}
 

@@ -6,6 +6,13 @@ import { Component } from "react";
 import AuthLayout from "../layout/AuthLayout";
 import LoginPage from "../pages/LoginPage";
 import RegistrationPage from "../pages/RegistrationPage";
+import PrivateRoute from "../context/PrivateRoute";
+import UpdateProfile from "../pages/UpdateProfile";
+
+import DashBoard from "../pages/DashBoard";
+import AddTransaction from "../pages/AddTransaction";
+
+
 
 const router= createBrowserRouter([
   {
@@ -17,6 +24,16 @@ const router= createBrowserRouter([
         Component:home
 
 
+      },
+      {
+        path:'/transaction',
+        element:<PrivateRoute><DashBoard></DashBoard></PrivateRoute>
+        
+      },
+      {
+        path:'/add-transaction',
+        element:<PrivateRoute><AddTransaction></AddTransaction></PrivateRoute>
+        
       }
     ]
   },
@@ -31,6 +48,10 @@ const router= createBrowserRouter([
     {
       path:'/auth/registration',
       element:<RegistrationPage></RegistrationPage>
+    },
+    {
+      path:'/auth/updateProfile',
+      element: <PrivateRoute><UpdateProfile></UpdateProfile></PrivateRoute>
     }
     
   ]

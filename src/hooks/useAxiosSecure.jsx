@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
@@ -14,7 +14,7 @@ const useAxiosSecure = () => {
   useEffect(() => {
     // Request interceptor — attach token
     const reqInterceptor = axiosSecure.interceptors.request.use((config) => {
-      const token = localStorage.getItem("finease_token");
+      const token = localStorage.getItem("token");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

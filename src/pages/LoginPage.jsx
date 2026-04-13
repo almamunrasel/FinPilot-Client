@@ -41,11 +41,11 @@ const LoginPage = () => {
   setError('');
   try{
    const res= await googleSignIn();
-    setSuccess('you are succefully logged in via google')
+   setSuccess('you are succefully logged in via google')
    console.log(res);
 
   }catch(err){
-    setError(err,"Google sign-in failed. Try again.");
+    setError(err.message ||"Google sign-in failed. Try again.");
 
   }
   
