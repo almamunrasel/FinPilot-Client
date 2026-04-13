@@ -11,6 +11,7 @@ import UpdateProfile from "../pages/UpdateProfile";
 
 import DashBoard from "../pages/DashBoard";
 import AddTransaction from "../pages/AddTransaction";
+import TransactionDetails from "../pages/TransactionDetails";
 
 
 
@@ -34,6 +35,11 @@ const router= createBrowserRouter([
         path:'/add-transaction',
         element:<PrivateRoute><AddTransaction></AddTransaction></PrivateRoute>
         
+      },
+      {
+        path:'/transactionDetails/:id',
+        element: <PrivateRoute><TransactionDetails></TransactionDetails></PrivateRoute>
+
       }
     ]
   },
