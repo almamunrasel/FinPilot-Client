@@ -14,6 +14,7 @@ const AddTransaction = () => {
   const [error,setError]=useState({});
   const axiosSecure=useAxiosSecure();
   const {user,loading}=useAuth();
+  
    
 
   const handleAddTransaction=async(e)=>{
@@ -25,6 +26,7 @@ const AddTransaction = () => {
       return;
     }
     const description=e.target.description.value;
+    
     const date=e.target.date.value;
     const newTransaction = {
     type,

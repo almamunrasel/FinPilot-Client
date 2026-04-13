@@ -38,10 +38,7 @@ const router= createBrowserRouter([
       {
         path:'/transactionDetails/:id',
         element: <PrivateRoute><TransactionDetails></TransactionDetails></PrivateRoute>
-        
-          
-
-        }
+      }
 
       
     ]

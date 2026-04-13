@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AddTransaction from './AddTransaction';
 import AllTransactions from './AllTransactions';
+import Summary from './Summary';
 
 
 
@@ -41,6 +42,9 @@ const DashBoard = () => {
         </div>
 
         <div>
+          {
+            activeTab==="summary" && <Summary></Summary>
+           }
           {
             activeTab==="add" && <AddTransaction></AddTransaction>
            }
