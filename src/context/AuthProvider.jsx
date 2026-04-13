@@ -14,6 +14,7 @@ const AuthProvider = ({children}) => {
   const [user,setUser]=useState(null);
   const [loading,setLoading]=useState(true);
 
+
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   
    
@@ -105,7 +106,7 @@ const AuthProvider = ({children}) => {
     setLoading,
     googleSignIn,
     logOut,
-    updateProfile
+    updateProfile,
     }
   return <AuthContext.Provider value={authData}>
     {children}

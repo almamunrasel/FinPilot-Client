@@ -3,6 +3,7 @@ import AddTransaction from './AddTransaction';
 import AllTransactions from './AllTransactions';
 
 
+
 const TABS = [
   { id: "summary",  label: "Summary",          icon: "▦" },
   { id: "all",      label: "All Transactions",  icon: "≡" },
@@ -11,13 +12,14 @@ const TABS = [
 
 const DashBoard = () => {
   const [activeTab, setActiveTab] = useState("summary");
+  
   return (
     <div className='min-h-screen bg-slate-50'>
        <div className='max-w-4xl mx-auto px-4 sm:px-6 py-10'>
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Transactions</h1>
           <p className="text-slate-500 text-sm mt-1">
-            Manage your money — 0 total entries
+            Manage your money
           </p>
         </div>
 

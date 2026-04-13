@@ -14,7 +14,6 @@ import AddTransaction from "../pages/AddTransaction";
 import TransactionDetails from "../pages/TransactionDetails";
 
 
-
 const router= createBrowserRouter([
   {
     path:'/',
@@ -39,8 +38,12 @@ const router= createBrowserRouter([
       {
         path:'/transactionDetails/:id',
         element: <PrivateRoute><TransactionDetails></TransactionDetails></PrivateRoute>
+        
+          
 
-      }
+        }
+
+      
     ]
   },
   {
