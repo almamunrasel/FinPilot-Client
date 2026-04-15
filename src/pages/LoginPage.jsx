@@ -14,7 +14,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/dashboard";
+  const from = location.state?.from?.pathname || "/";
 
   const handleLogin=async(e)=>{
     e.preventDefault();
@@ -26,7 +26,7 @@ const LoginPage = () => {
       await login({email,password});
       setSuccess('you have been logged in successfully via email and password');
       e.target.reset();
-      // navigate(from, { replace: true });
+      navigate(from, { replace: true });
 
         
     }catch(err){

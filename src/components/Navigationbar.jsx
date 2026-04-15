@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 
 
+
 const Navigationbar = () => {
   const {user,loading,logOut}=useAuth();
   console.log(user);
@@ -25,25 +26,26 @@ const Navigationbar = () => {
       </li>
 
       {/* All Products with Submenu */}
-      <li className="group relative">
+      {/* <li className="group relative">
         <div className="cursor-pointer relative py-2 px-3 text-white transition-colors duration-300 group-hover:text-blue-300 flex items-center gap-1">
-          All Products
+          My Transaction
           <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
           </svg>
           <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
         </div>
 
-        {/* Fluid Submenu Dropdown */}
-        <ul className="absolute left-0 top-full mt-0 w-48 bg-white text-gray-800 rounded-md shadow-xl 
-                       opacity-0 invisible translate-y-2 transition-all duration-300 
-                       group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50 p-2">
-          <li><NavLink to="/allproducts/software" className="block p-2 hover:bg-indigo-50 rounded">Financial Software</NavLink></li>
-          <li><NavLink to="/" className="block p-2 hover:bg-indigo-50 rounded">Transaction Details</NavLink></li>
-          <li><NavLink to="/" className="block p-2 hover:bg-indigo-50 rounded">Add transaction</NavLink></li>
+        // {/* Fluid Submenu Dropdown */}
+        {/* // <ul className="absolute left-0 top-full mt-0 w-48 bg-white text-gray-800 rounded-md shadow-xl 
+        //                opacity-0 invisible translate-y-2 transition-all duration-300 
+        //                group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 z-50 p-2">
+        //   <li><NavLink to="/transaction" className="block p-2 hover:bg-indigo-50 rounded">Add Transaction</NavLink></li>
+        //   <li><NavLink to="/transaction" className="block p-2 hover:bg-indigo-50 rounded">All Transaction</NavLink></li>
+        //   <li><NavLink to="/transaction" className="block p-2 hover:bg-indigo-50 rounded">Summary</NavLink></li>
           
-        </ul>
-      </li>
+          
+        // </ul>
+      </li> */} 
 
       <li>
         <NavLink to="/transaction" className="relative group py-2 px-3 text-white transition-colors duration-300 hover:text-blue-300">
@@ -51,6 +53,13 @@ const Navigationbar = () => {
           <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
         </NavLink>
       </li>
+       <li>
+        <NavLink to="/myProfile" className="relative group py-2 px-3 text-white transition-colors duration-300 hover:text-blue-300">
+          My Profile
+          <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+        </NavLink>
+      </li>
+
     </>
   );
 
@@ -69,9 +78,9 @@ const Navigationbar = () => {
             </ul>
           </div>
 
-          <a className="btn btn-ghost text-3xl font-bold transition-all duration-300 hover:from-indigo-600 hover:to-blue-900 hover:bg-gradient-to-b hover:text-white hover:-rotate-6 hover:scale-105">
+          <NavLink to='/' className="btn btn-ghost text-3xl font-bold transition-all duration-300 hover:from-indigo-600 hover:to-blue-900 hover:bg-gradient-to-b hover:text-white hover:-rotate-6 hover:scale-105">
             FinPilot
-          </a>
+          </NavLink>
         </div>
 
         <div className="navbar-center hidden lg:flex overflow-visible">

@@ -12,6 +12,7 @@ import UpdateProfile from "../pages/UpdateProfile";
 import DashBoard from "../pages/DashBoard";
 import AddTransaction from "../pages/AddTransaction";
 import TransactionDetails from "../pages/TransactionDetails";
+import MyProfile from "../pages/MyProfile";
 
 
 const router= createBrowserRouter([
@@ -38,6 +39,10 @@ const router= createBrowserRouter([
       {
         path:'/transactionDetails/:id',
         element: <PrivateRoute><TransactionDetails></TransactionDetails></PrivateRoute>
+      },
+      {
+        path:'/myProfile',
+        element:<PrivateRoute><MyProfile></MyProfile></PrivateRoute>
       }
 
       
