@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import AddTransaction from './AddTransaction';
 import AllTransactions from './AllTransactions';
 import Summary from './Summary';
+import { motion } from "framer-motion";
 
 
 
@@ -15,6 +16,8 @@ const DashBoard = () => {
   const [activeTab, setActiveTab] = useState("summary");
   
   return (
+   
+   
     <div className='min-h-screen bg-slate-50'>
        <div className='max-w-4xl mx-auto px-4 sm:px-6 py-10'>
         <div className="mb-8">
@@ -40,7 +43,12 @@ const DashBoard = () => {
             </button>
           ))}
         </div>
-
+        <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+             
+         >
         <div>
           {
             activeTab==="summary" && <Summary></Summary>
@@ -52,10 +60,12 @@ const DashBoard = () => {
             activeTab==="all" && <AllTransactions></AllTransactions>
            }
         </div>
+        </motion.div>
 
        </div>
       
     </div>
+   
   );
 };
 
