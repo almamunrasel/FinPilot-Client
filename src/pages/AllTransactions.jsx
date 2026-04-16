@@ -3,6 +3,7 @@ import useAxiosSecure from '../hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import {  useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const cM=(n)=>
   '৳' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -25,6 +26,7 @@ const AllTransactions = () => {
   const [filter,setFilter]=useState('all');
   const [sortOrder,setSortOrder]=useState('newest');
   const navigate    = useNavigate();
+  const [loading,setLoading]=useState(true);
   useEffect(()=>{
     const fetchTransactions=async()=>{
       try{
@@ -36,6 +38,10 @@ const AllTransactions = () => {
         console.log(error);
         toast.error('Failed to load Transactions!!');
       }
+      finally{
+        setLoading(false);
+      }
+      
       
     };
     fetchTransactions();
@@ -78,6 +84,10 @@ const AllTransactions = () => {
       }
     }
 
+  }
+
+  if(loading){
+    return <LoadingSpinner></LoadingSpinner>
   }
   return (
     <div className='max-w-4xl mx-auto px-4 py-10'>

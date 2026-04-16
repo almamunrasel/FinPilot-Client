@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  } from 'react';
 
 import Footer from '../components/Footer';
 import { Outlet } from 'react-router';
@@ -8,7 +8,12 @@ import { Home } from 'lucide-react';
 
 
 
+
+
 const homelayout = () => {
+
+
+
   return (
     <div>
       <section className='sticky top-0 z-50'>

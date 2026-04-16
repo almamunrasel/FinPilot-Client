@@ -13,6 +13,7 @@ import DashBoard from "../pages/DashBoard";
 import AddTransaction from "../pages/AddTransaction";
 import TransactionDetails from "../pages/TransactionDetails";
 import MyProfile from "../pages/MyProfile";
+import ErrorPage from "../pages/ErrorPage";
 
 
 const router= createBrowserRouter([
@@ -66,6 +67,11 @@ const router= createBrowserRouter([
     }
     
   ]
+
+  },
+  {
+    path:'/*',
+    element:<ErrorPage></ErrorPage>
 
   }
   

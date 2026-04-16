@@ -13,7 +13,7 @@ const TABS = [
 ];
 
 const DashBoard = () => {
-  const [activeTab, setActiveTab] = useState("summary");
+  const [activeTab, setActiveTab] = useState("");
   
   return (
    

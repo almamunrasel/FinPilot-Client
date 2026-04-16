@@ -13,8 +13,9 @@ const AddTransaction = () => {
   const [type,setType]=useState('expense');
   const [error,setError]=useState({});
   const axiosSecure=useAxiosSecure();
-  const {user,loading}=useAuth();
-  
+  const {user}=useAuth();
+  const [submitting, setSubmitting] = useState(false);
+
    
 
   const handleAddTransaction=async(e)=>{
@@ -37,9 +38,11 @@ const AddTransaction = () => {
     email: user?.email,
     name: user?.name,
     };
+   
     
-    console.log(newTransaction);
+    // console.log(newTransaction);
     try{
+       setSubmitting(true);
       const res=await axiosSecure.post('/transactions',newTransaction);
       toast.success('transaction added!');
       console.log(res);
@@ -48,10 +51,11 @@ const AddTransaction = () => {
 
     }catch(error){
       toast.error('failed to add transaction');
-
-
-
     }
+    finally {
+      setSubmitting(false);
+    }
+
  
 
   }
@@ -152,10 +156,13 @@ const AddTransaction = () => {
         </div>
         
         </div>
-        <button type="submit" 
-          className="w-full mt-2 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold rounded-xl text-sm transition-all cursor-pointer disabled:cursor-not-allowed shadow-sm hover:shadow-md">
-          {loading ? "Adding…" : "Add Transaction"}
-        </button>
+        <button
+              type="submit"
+              disabled={submitting}
+              className="w-full mt-2 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-semibold rounded-xl text-sm transition-all cursor-pointer disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+            >
+              {submitting ? "Adding…" : "Add Transaction"}
+            </button>
 
        
       </form>
