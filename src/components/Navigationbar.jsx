@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router';
 import useAuth from '../hooks/useAuth';
 import userIcon from '../assets/user.png'
 import { toast } from 'react-toastify';
+import { useTheme } from '../context/ThemeProvider';
 
 
 
@@ -10,6 +11,7 @@ import { toast } from 'react-toastify';
 
 const Navigationbar = () => {
   const {user,loading,logOut}=useAuth();
+  const {theme,toggleTheme}=useTheme();
   console.log(user);
   const handlelogOut=()=>{
     logOut();
@@ -58,6 +60,11 @@ const Navigationbar = () => {
           My Profile
           <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-300 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
         </NavLink>
+      </li>
+      <li>
+        <button onClick={toggleTheme} className="btn">
+              {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+            </button>
       </li>
 
     </>

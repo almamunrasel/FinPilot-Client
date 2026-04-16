@@ -166,15 +166,15 @@ const AllTransactions = () => {
             <div className={`h-2.5 w-2.5 rounded-full  ${style.dot}`}></div>
             <div className='flex-1'>
               <div className='flex items-center gap-2  flex-wrap'>
-               <p className='text-lg font-medium text-slate-800'>{t.description}</p>
+               <p className='sm:text-xs md:text-lg font-medium text-slate-800'>{t.description}</p>
                <span className={`px-2 py-0.5 text-xs rounded-2xl ${style.badge}`}>{t.category}</span>
 
             </div>
             <p className='text-sm text-slate-400 mt-0.5'>{fmtDate(t.date)}</p>
             </div>
-            <p className={`${style.amount} font-semibold shrink-0`}>{t.type==='income'? '+':'-'}{cM(t.amount)}</p>
+            <p className={`${style.amount} sm:text-xs md:text-lg font-semibold shrink-0`}>{t.type==='income'? '+':'-'}{cM(t.amount)}</p>
 
-            <div className='flex sm:flex-col md:flex-row gap-2 shrink-0 '>
+            <div className='prebutun flex flex-col  md:flex-row gap-2  '>
               <button className='text-xs px-3 py-1.5 bg-indigo-50 rounded-lg hover:bg-indigo-100 cursor-pointer' onClick={()=> navigate(`/transactionDetails/${t._id}`)}>View</button>
               {/* <button className='text-xs px-3 py-1.5 bg-indigo-50 rounded-lg hover:bg-indigo-100 cursor-pointer'>Edit</button> */}
               <button onClick={()=>handleDelete(t._id)} className='text-xs px-3 py-1.5 bg-red-50 rounded-lg hover:bg-red-100 cursor-pointer'>Delete</button>
