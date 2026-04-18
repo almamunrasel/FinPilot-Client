@@ -42,7 +42,8 @@ const LoginPage = () => {
   try{
    const res= await googleSignIn();
    setSuccess('you are succefully logged in via google')
-   console.log(res);
+   navigate(from, { replace: true });
+   
 
   }catch(err){
     setError(err.message ||"Google sign-in failed. Try again.");
