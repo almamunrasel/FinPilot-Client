@@ -1,82 +1,114 @@
-import React from 'react';
+import React from "react";
+import { motion as Motion } from "framer-motion";
+import { Link } from "react-router";
 
-const StatCard = ({ percentage, description }) => (
-  <div className="bg-white p-8 rounded-xl shadow-sm border-b-8 border-[#2DD4BF] flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-    <h3 className="text-5xl lg:text-6xl font-black text-[#161c5f] mb-4">{percentage}</h3>
-    <p className="text-[#161c5f] font-medium leading-relaxed">
-      {description}
-    </p>
-  </div>
-);
+const stats = [
+  {
+    value: "90%",
+    title: "feel better about finances",
+    description: "Users report less stress and better month-end confidence.",
+  },
+  {
+    value: "3.1x",
+    title: "faster goal tracking",
+    description: "Progress updates become clear with category-by-category plans.",
+  },
+  {
+    value: "70%",
+    title: "build emergency savings",
+    description: "Most users save for 3+ months of basic expenses.",
+  },
+  {
+    value: "93%",
+    title: "recommend FinPilot",
+    description: "Families share it because it is simple and practical.",
+  },
+];
+
+const features = [
+  "Track income, bills, and day-to-day spending in one place",
+  "Set category limits with automatic spend alerts",
+  "Understand trends using a clean visual dashboard",
+];
 
 const StatsSection = () => {
   return (
-    <section className="relative bg-[#F4F9DD] pt-20 pb-32 overflow-hidden">
-      {/* Curved Background Wrapper */}
-     <div className="absolute inset-0 z-0 pointer-events-none ">
-        <svg 
-          className="absolute bottom-0 left-0 w-full h-[70%]" 
-          viewBox="0 0 1440 320" 
-          preserveAspectRatio="none"
-        >
-          <path 
-            /* The lower color from your image */
-            fill="#FDF5D3" 
-            d="M0,160 C480,350 960,0 1440,160 L1440,320 L0,320 Z"
-          />
-        </svg>
-     </div>
-
-      <div className="container mx-auto px-6 lg:px-16 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-16">
-          
-          {/* Left Text Content */}
-          <div className="w-full lg:w-2/5 space-y-6">
-            <h2 className="text-4xl lg:text-5xl font-black text-[#161c5f] leading-tight">
-              We’re #1 for a reason...
+    <section className="bg-slate-50 py-20 transition-colors dark:bg-[#0f1b46]">
+      <Motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.55 }}
+        className="mx-auto w-11/12 max-w-7xl space-y-16"
+      >
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div className="space-y-6">
+            <p className="inline-block rounded-full bg-indigo-100 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
+              Why people love FinPilot
+            </p>
+            <h2 className="text-3xl font-extrabold leading-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+              A polished money app that helps you make better decisions every day
             </h2>
-            <p className="text-gray-500 italic text-sm">
-              (and not just because our mom said so.)
+            <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+              The homepage now focuses on strong readability, cleaner spacing, and
+              visual hierarchy so new users instantly understand your product value.
             </p>
-            <p className="text-[#161c5f] text-lg leading-relaxed">
-              FinPilot simplifies spending decisions, clarifies priorities, and brings more joy to every day and every dollar by making it easy to get good at money. Just give every dollar a job and never worry about money again.
-            </p>
-            <button className="mt-4 px-8 py-3 border-2 border-indigo-600 text-indigo-600 font-bold rounded-lg transition-all hover:bg-indigo-50 active:scale-95">
-              Learn More About the Method
-            </button>
+            <div className="space-y-3">
+              {features.map((item, index) => (
+                <Motion.div
+                  key={item}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.08, duration: 0.35 }}
+                  className="flex items-start gap-3 rounded-lg bg-white p-3 shadow-sm dark:bg-[#162447]"
+                >
+                  <span className="mt-1 h-2.5 w-2.5 rounded-full bg-cyan-500" />
+                  <p className="text-sm text-slate-700 dark:text-slate-200 sm:text-base">{item}</p>
+                </Motion.div>
+              ))}
+            </div>
           </div>
 
-          {/* Right Cards Grid */}
-          <div className="w-full lg:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <StatCard 
-              percentage="90%" 
-              description="say their finances are in a better place since starting FinPilot*" 
-            />
-            <StatCard 
-              percentage="91%" 
-              description="say FinPilot has changed the way they think about money*" 
-            />
-            <StatCard 
-              percentage="70%" 
-              description="of FinPilot users could live for 3 months or more on savings*" 
-            />
-            <StatCard 
-              percentage="93%" 
-              description="have recommended FinPilot to friends or family*" 
-            />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {stats.map((item, index) => (
+              <Motion.article
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08, duration: 0.4 }}
+                className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-[#162447]"
+              >
+                <p className="text-3xl font-extrabold text-indigo-700">{item.value}</p>
+                <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  {item.title}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                  {item.description}
+                </p>
+              </Motion.article>
+            ))}
           </div>
         </div>
-        
-        {/* Footer Note */}
-        <p className="text-right text-[10px] text-gray-400 mt-12 w-full uppercase tracking-widest">
-          *based on survey responses
-        </p>
 
-        {/* <p className='text-center text-2xl mt-40 '>FinPilot isn’t just a tool for money management. It’s a tool for self-actualization. Who do you want to be, and how can the money you earn help you get there?”</p> */}
-      </div>
-
-       
-
+        <div className="rounded-3xl bg-linear-to-r from-[#1b2b82] to-[#293ca5] p-8 text-white sm:p-10">
+          <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div className="max-w-2xl space-y-2">
+              <h3 className="text-2xl font-bold sm:text-3xl">
+                Ready to upgrade your financial life?
+              </h3>
+              <p className="text-indigo-100">
+                Join FinPilot today and start planning smarter with a beautiful,
+                distraction-free experience.
+              </p>
+            </div>
+            <Link to="/auth/registration" className="rounded-xl bg-lime-300 px-6 py-3 text-sm font-bold text-[#12215f] transition hover:bg-lime-200">
+              Create Free Account
+            </Link>
+          </div>
+        </div>
+      </Motion.div>
     </section>
   );
 };

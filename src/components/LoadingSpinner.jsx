@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 
 const LoadingSpinner = () => {
   // Container variants to stagger the children (the bars)
@@ -23,30 +23,28 @@ const LoadingSpinner = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-base-300">
-      {/* Animated Bars Container */}
-      <motion.div
+    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-100 dark:bg-[#0f1b46]">
+      <Motion.div
         variants={containerVariants}
         initial="initial"
         animate="animate"
-        className="flex gap-2 mb-4 items-center h-20"
+        className="mb-4 flex h-20 items-center gap-2"
       >
-        <motion.div variants={barVariants} className="w-2 h-10 bg-primary rounded-full" />
-        <motion.div variants={barVariants} className="w-2 h-10 bg-secondary rounded-full" />
-        <motion.div variants={barVariants} className="w-2 h-10 bg-accent rounded-full" />
-        <motion.div variants={barVariants} className="w-2 h-10 bg-primary rounded-full" />
-        <motion.div variants={barVariants} className="w-2 h-10 bg-secondary rounded-full" />
-      </motion.div>
+        <Motion.div variants={barVariants} className="h-10 w-2 rounded-full bg-indigo-500" />
+        <Motion.div variants={barVariants} className="h-10 w-2 rounded-full bg-cyan-500" />
+        <Motion.div variants={barVariants} className="h-10 w-2 rounded-full bg-violet-500" />
+        <Motion.div variants={barVariants} className="h-10 w-2 rounded-full bg-indigo-500" />
+        <Motion.div variants={barVariants} className="h-10 w-2 rounded-full bg-cyan-500" />
+      </Motion.div>
 
-      {/* Loading Text with Pulse */}
-      <motion.h2
+      <Motion.h2
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.2, 1, 0.2] }}
         transition={{ repeat: Infinity, duration: 1.5 }}
-        className="text-xl font-bold tracking-widest uppercase text-base-content"
+        className="text-xl font-bold tracking-widest text-slate-700 uppercase dark:text-slate-200"
       >
-        Loading ...
-      </motion.h2>
+        Loading...
+      </Motion.h2>
     </div>
   );
 };

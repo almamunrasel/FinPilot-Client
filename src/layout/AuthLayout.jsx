@@ -1,20 +1,16 @@
-import React from 'react';
-import Navigationbar from '../components/Navigationbar';
-
-import { Outlet } from 'react-router';
-import Footer from '../components/Footer';
+import React from "react";
+import { Outlet } from "react-router";
+import Footer from "../components/Footer";
 
 const AuthLayout = () => {
   return (
-    <div className='min-h-screen'>
-     
+    <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors dark:bg-[#0f1b46] dark:text-slate-100">
       <main>
-        <Outlet></Outlet>
+        <Outlet />
       </main>
       <div>
-        <Footer></Footer>
+        <Footer />
       </div>
-      
     </div>
   );
 };

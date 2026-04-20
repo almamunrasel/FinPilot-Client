@@ -1,23 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import useAxiosSecure from '../hooks/useAxiosSecure';
-import { toast } from 'react-toastify';
+import React, { useEffect, useMemo, useState } from "react";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import { toast } from "react-toastify";
+import { motion as Motion } from "framer-motion";
 
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from 'recharts';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingSpinner from "../components/LoadingSpinner";
 
-const MONTHS = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December',
-];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const PIE_COLORS = [
-  '#6366f1','#10b981','#f59e0b','#ef4444','#8b5cf6',
-  '#06b6d4','#f97316','#ec4899','#14b8a6','#84cc16',
+  "#6366f1", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6",
+  "#06b6d4", "#f97316", "#ec4899", "#14b8a6", "#84cc16",
 ];
-const fmt = (n) =>
-  '৳' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+const fmt = (n) => "৳" + Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
 const PieTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
@@ -70,34 +67,32 @@ const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent
 };
 
 const Summary = () => {
-  const [transactions,setTransactions]=useState([]);
-  const axiosSecure=useAxiosSecure();
-const [loading, setLoading] = useState(true);
-  const [selectedMonth,setSelectedMonth]=useState('All');
+  const [transactions, setTransactions] = useState([]);
+  const axiosSecure = useAxiosSecure();
+  const [loading, setLoading] = useState(true);
+  const [selectedMonth, setSelectedMonth] = useState("All");
 
   //monthwise transaction 
 
 
   useEffect(()=>{
-    axiosSecure.get('/transactions')
-     .then(res=>setTransactions(res.data.transactions))
-     .catch(()=>toast.error('fialed to load report data'))
-     .finally(()=>setLoading(false));
-
-  },[])
+    axiosSecure.get("/transactions")
+      .then((res) => setTransactions(res.data.transactions))
+      .catch(() => toast.error("Failed to load report data"))
+      .finally(() => setLoading(false));
+  }, [axiosSecure]);
 
   const monTran=useMemo(()=>{
-    if(selectedMonth==='All') return transactions;
+    if (selectedMonth === "All") return transactions;
     else{
-      return transactions.filter(t=>new Date(t.date).getMonth()===parseInt(selectedMonth));
+      return transactions.filter((t) => new Date(t.date).getMonth() === parseInt(selectedMonth));
     }
-
-  },[selectedMonth,transactions]);
+  }, [selectedMonth, transactions]);
 
 
   const pieData = useMemo(() => {
       const map = {};
-      monTran.filter(t => t.type === 'expense')
+      monTran.filter((t) => t.type === "expense")
         .forEach(t => { map[t.category] = (map[t.category] || 0) + t.amount; });
       const total = Object.values(map).reduce((s, v) => s + v, 0);
       return Object.entries(map)
@@ -105,7 +100,7 @@ const [loading, setLoading] = useState(true);
         .map(([name, value]) => ({
           name,
           value,
-          percent: total > 0 ? ((value / total) * 100).toFixed(1) : '0',
+          percent: total > 0 ? ((value / total) * 100).toFixed(1) : "0",
         }));
     }, [monTran]);
   
@@ -115,20 +110,20 @@ const [loading, setLoading] = useState(true);
       transactions.forEach(t => {
         const m = new Date(t.date).getMonth();
         if (!map[m]) map[m] = { month: MONTHS[m].slice(0, 3), income: 0, expense: 0, order: m };
-        if (t.type === 'income')  map[m].income  += t.amount;
-        else                      map[m].expense += t.amount;
+        if (t.type === "income") map[m].income += t.amount;
+        else map[m].expense += t.amount;
       });
       return Object.values(map).sort((a, b) => a.order - b.order);
     }, [transactions]);
   
   
     const stats = useMemo(() => {
-    const income  = monTran.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-    const expense = monTran.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-    const rate    = income > 0 ? (((income - expense) / income) * 100).toFixed(1) : '0.0';
+    const income = monTran.filter((t) => t.type === "income").reduce((s, t) => s + t.amount, 0);
+    const expense = monTran.filter((t) => t.type === "expense").reduce((s, t) => s + t.amount, 0);
+    const rate = income > 0 ? (((income - expense) / income) * 100).toFixed(1) : "0.0";
     return { income, expense, balance: income - expense, savingsRate: rate };
   }, [monTran]);
-   const currentMonthLabel = selectedMonth === 'All' ? 'All Time' : MONTHS[parseInt(selectedMonth)];
+   const currentMonthLabel = selectedMonth === "All" ? "All Time" : MONTHS[parseInt(selectedMonth)];
 
    if (loading) return (
     <div className="flex flex-col items-center justify-center py-32 gap-3">
@@ -138,30 +133,39 @@ const [loading, setLoading] = useState(true);
   );
  
   return (
-    <div className='max-w-6xl mx-auto sm:px-6 py-10'>
+    <Motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="mx-auto max-w-6xl py-10 sm:px-6"
+    >
       
       {/* page header */}
-      <div className='flex items-start justify-between flex-wrap gap-4 mb-10'>
+      <div className="mb-10 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className='text-2xl font-bold text-slate-900 tracking-tight'>Financial Reports</h1>
-          <p className='text-slate-400 text-lg mt-1'>{transactions.length} transactions.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Financial Reports</h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{transactions.length} transactions</p>
         </div>
-        <div className='flex items-center gap-2'>
-          <span className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Filter</span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold uppercase tracking-wider text-slate-400">Filter</span>
           <select value={selectedMonth}
-          onChange={e=>setSelectedMonth(e.target.value)} className='px-2 py-2.5 border border-slate-200 rounded-xl text-slate-700 focus:border-indigo-400 bg-white shadom-sm outline-none'>
+          onChange={e=>setSelectedMonth(e.target.value)} className="rounded-xl border border-slate-200 bg-white px-2 py-2.5 text-slate-700 outline-none focus:border-indigo-400 dark:border-slate-700 dark:bg-[#162447] dark:text-slate-200">
             <option value="All">All Months</option>
-            {MONTHS.map((month,index)=><option value={index}>{month}</option>)}
-
+            {MONTHS.map((month, index) => <option key={month} value={index}>{month}</option>)}
           </select>
         </div>
       </div>
       
-      <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-10'>
+      <Motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.12, duration: 0.4 }}
+        className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4"
+      >
         {/* stat card */}
           <StatCard
               label='Net Balance' icon="💰"
-              value={stats.balance}
+              value={fmt(stats.balance)}
               colorClass={stats.balance >= 0 ? 'text-indigo-600' : 'text-rose-500'}
               bgClass={stats.balance >= 0 ? 'bg-indigo-50' : 'bg-rose-50'}
               borderClass={stats.balance >= 0 ? 'border-indigo-100' : 'border-rose-100'}
@@ -169,14 +173,14 @@ const [loading, setLoading] = useState(true);
 
           <StatCard
               label='Total Income' icon="📈"
-              value={stats.income}
+              value={fmt(stats.income)}
               colorClass="text-emerald-600"
               bgClass="bg-emerald-50"
               borderClass="border-emerald-100"
           />
           <StatCard
               label="Total Expenses" icon="📉"
-              value={stats.expense}
+              value={fmt(stats.expense)}
               colorClass="text-rose-500"
               bgClass="bg-rose-50"
               borderClass="border-rose-100"
@@ -186,15 +190,15 @@ const [loading, setLoading] = useState(true);
               label="Savings Rate" icon="🎯"
               value={`${stats.savingsRate}%`}
               sub="of income saved"
-              colorClass={parseFloat(stats.savingsRate) >= 20 ? 'text-emerald-600' : 'text-amber-500'}
+              colorClass={parseFloat(stats.savingsRate) >= 20 ? "text-emerald-600" : "text-amber-500"}
               bgClass={parseFloat(stats.savingsRate) >= 20 ? 'bg-emerald-50' : 'bg-amber-50'}
               borderClass={parseFloat(stats.savingsRate) >= 20 ? 'border-emerald-100' : 'border-amber-100'}
         />
-      </div>
+      </Motion.div>
 
       {
           monTran.length===0 ? (
-            <div className=" dataless text-center py-20  bg-white rounded-2xl border border-slate-100">
+            <div className="dataless rounded-2xl border border-slate-100 bg-white py-20 text-center dark:border-slate-800 dark:bg-[#162447]">
               <p className="text-5xl mb-4">📊</p>
               <p className="text-slate-500 font-medium">No data for this period</p>
               <p className="text-slate-400 text-sm mt-1">Try selecting a different month</p>
@@ -205,12 +209,17 @@ const [loading, setLoading] = useState(true);
             <>
 
               {/* ── charts row ── */}
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                      <Motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.18, duration: 0.45 }}
+                        className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2"
+                      >
             
                         {/* pie chart */}
-                        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#162447]">
                           <div className="mb-5">
-                            <h2 className="text-base font-bold text-slate-800">Expenses by Category</h2>
+                            <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">Expenses by Category</h2>
                             <p className="text-xs text-slate-400 mt-0.5">{currentMonthLabel} · {pieData.length} categories</p>
                           </div>
             
@@ -249,9 +258,9 @@ const [loading, setLoading] = useState(true);
                         </div>
             
                         {/* bar chart */}
-                        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+                        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-[#162447]">
                           <div className="mb-5">
-                            <h2 className="text-base font-bold text-slate-800">Monthly Overview</h2>
+                            <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">Monthly Overview</h2>
                             <p className="text-xs text-slate-400 mt-0.5">Income vs Expenses · All months</p>
                           </div>
             
@@ -289,7 +298,7 @@ const [loading, setLoading] = useState(true);
                             </ResponsiveContainer>
                           )}
                         </div>
-                      </div>
+                      </Motion.div>
             
             </>
           )
@@ -297,7 +306,7 @@ const [loading, setLoading] = useState(true);
       
 
       
-    </div>
+    </Motion.div>
   );
 };
 

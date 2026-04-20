@@ -1,216 +1,162 @@
 import React, { useState } from "react";
-import { Link,   } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FaEyeSlash } from "react-icons/fa";
 import { PiEyesBold } from "react-icons/pi";
 import { FcGoogle } from "react-icons/fc";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import useAuth from "../hooks/useAuth";
 
 const RegistrationPage = () => {
   const [show, setShow] = useState(false);
-  const [error,setError]=useState('');
-  const [success,setSuccess]=useState('');
-  const {register,setLoading,googleSignIn}=useAuth();
-  
-  // const location = useLocation();
-  // const from = location.state?.from?.pathname || "/";
-  
-  const passwordRegex =
-  /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
-  
-  const handleRegister=async(e)=>{
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const { register, setLoading, googleSignIn } = useAuth();
+  const navigate = useNavigate();
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const name=e.target.name.value;
-    const photoURL=e.target.photoURL.value;
+    const name = e.target.name.value;
+    const photoURL = e.target.photoURL.value;
     const email = e.target.email.value;
-    const password=e.target.password.value;
-    const terms= e.target.terms.checked;
-    console.log(name,photoURL,email,password);
+    const password = e.target.password.value;
+    const terms = e.target.terms.checked;
+
+    setError("");
+    setSuccess("");
+
     if (!passwordRegex.test(password)) {
-      return setError("Password must be one uppercase,one lowercase and 6 characters");
+      return setError("Password must include upper/lowercase and be at least 6 characters.");
     }
-    setError('');
-    setSuccess(false);
-    if(!terms){
-      setError('please accept our terms and conditions');
+
+    if (!terms) {
+      setError("Please accept our terms and conditions.");
       return;
     }
-    setSuccess(false);
-    if(!terms){
-      setError('please accept our terms and conditions');
-      return;
-    }
-    try{
-      await register({name,photoURL,email,password});
-      setSuccess('you have have been registerd succesfully via email and pass word');
+    try {
+      setLoading(true);
+      await register({ name, photoURL, email, password });
+      setSuccess("Your account has been created successfully.");
       e.target.reset();
-      // navigate('/');
-
-
-    }catch(err){
+    } catch (err) {
       setError(err.response?.data?.message || "Registration failed. Try again.");
-
-    } finally{
+    } finally {
       setLoading(false);
-      
     }
-    
-}
-const handlegoogleSignIn=async()=>{
-  setError('');
-  try{
-   const res= await googleSignIn();
-    setSuccess('you are succefully logged in via google')
-   console.log(res);
+  };
 
-  }catch(err){
-    setError(err.message ||"Google sign-in failed. Try again.");
-
-  }
-  
-
-}
+  const handlegoogleSignIn = async () => {
+    setError("");
+    setSuccess("");
+    try {
+      await googleSignIn();
+      setSuccess("You are successfully logged in via Google.");
+      navigate("/", { replace: true });
+    } catch (err) {
+      setError(err.message || "Google sign-in failed. Try again.");
+    }
+  };
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="min-h-screen bg-[#25346D] relative overflow-hidden text-white"
+      className="relative min-h-screen overflow-hidden bg-linear-to-br from-[#0f1d63] via-[#1f2f89] to-[#1f2a6f] text-white"
     >
-      {/* Background shapes */}
-      <div className="absolute top-0 left-0 w-[55%] h-40 bg-[#18244D] rounded-br-[120px] pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[50%] h-64 bg-[#1B2550] rounded-bl-[180px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[40%] h-56 bg-[#18244D] rounded-tl-[160px] pointer-events-none" />
+      <div className="pointer-events-none absolute -left-16 top-16 h-64 w-64 animate-pulse rounded-full bg-cyan-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-12 bottom-8 h-72 w-72 animate-pulse rounded-full bg-fuchsia-400/20 blur-3xl" />
 
-      {/* Logo */}
       <Link
         to="/"
-        className="absolute top-6 left-6 md:top-8 md:left-10 text-3xl md:text-5xl font-extrabold tracking-tight z-20 cursor-pointer"
+        className="absolute left-6 top-6 z-20 text-3xl font-extrabold tracking-tight md:left-10 md:top-8 md:text-5xl"
       >
-        FinPilot<span className="text-blue-500">.</span>
+        FinPilot<span className="text-cyan-300">.</span>
       </Link>
 
-      {/* Main layout */}
-      <div className="relative z-10 max-w-6xl mx-auto min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-between px-4 sm:px-6 md:px-8 lg:px-12 gap-10 py-20">
-        
-        {/* Left section */}
-        <div className="w-full lg:w-1/2 text-center lg:text-left space-y-4">
-          <div className="text-5xl md:text-6xl">🌳</div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-            Never worry about <br /> money again.
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center gap-12 px-4 py-20 sm:px-6 md:px-8 lg:flex-row lg:justify-between lg:px-12">
+        <div className="w-full space-y-5 text-center lg:w-1/2 lg:text-left">
+          <p className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-cyan-100">
+            Create account
+          </p>
+          <h1 className="text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
+            Build a healthier money habit with a better daily workflow.
           </h1>
-          <p className="text-lg md:text-2xl text-gray-200">
-            92% feel less stressed since starting FinPilot.
+          <p className="text-base text-indigo-100 md:text-xl">
+            Plan your expenses, monitor progress, and stay confident every month.
           </p>
         </div>
 
-        {/* Login card */}
-        <div className="w-full max-w-md bg-white text-black rounded-2xl shadow-2xl p-6 md:p-8">
-          <h2 className="text-3xl font-bold text-center mb-3">Sign Up</h2>
+        <div className="w-full max-w-md rounded-2xl border border-white/20 bg-white p-6 text-black shadow-2xl md:p-8">
+          <h2 className="mb-2 text-center text-3xl font-bold text-slate-900">Sign Up</h2>
 
-          <p className="text-center text-sm md:text-lg mb-6">
+          <p className="mb-6 text-center text-sm text-slate-600 md:text-base">
             Have an Account?{" "}
-            <span className="text-blue-600 hover:text-blue-900 cursor-pointer">
-              <Link to='/auth/login'>Log in.</Link>
-            </span>
+            <Link to="/auth/login" className="font-semibold text-indigo-600 hover:text-indigo-800">
+              Log in.
+            </Link>
           </p>
 
-          <form onSubmit={handleRegister} className="space-y-4 ">
-                    <div>
-                      <label className="label text-black font-semibold">Your name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        className="input input-bordered w-full"
-                        placeholder="enter your name"
-                        required
-                      />
-                    </div>
-                    <div> 
-                      <label className="label text-black font-semibold">Photo Url</label>
-                      <input
-                        type="text"
-                        name="photoURL"
-                        className="input input-bordered w-full"
-                        placeholder="enter your photo url"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="label text-black font-semibold">Email</label>
-                      <input
-                        type="email"
-                        name="email"
-                        className="input input-bordered w-full"
-                        placeholder="Email"
-                        required
-                      />
-                    </div>
+          <form onSubmit={handleRegister} className="space-y-4">
+            <div>
+              <label className="mb-1.5 block text-sm font-semibold text-slate-600">Your name</label>
+              <input type="text" name="name" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 outline-none transition focus:border-indigo-400 focus:bg-white" placeholder="Enter your full name" required />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-sm font-semibold text-slate-600">Photo URL</label>
+              <input type="text" name="photoURL" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 outline-none transition focus:border-indigo-400 focus:bg-white" placeholder="Paste your photo URL" required />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-sm font-semibold text-slate-600">Email</label>
+              <input type="email" name="email" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 outline-none transition focus:border-indigo-400 focus:bg-white" placeholder="Enter your email" required />
+            </div>
 
-                    <div>
-                      <label className="label text-black font-semibold">Password</label>
+            <div>
+              <label className="mb-1.5 block text-sm font-semibold text-slate-600">Password</label>
+              <div className="relative">
+                <input
+                  type={show ? "text" : "password"}
+                  name="password"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 outline-none transition focus:border-indigo-400 focus:bg-white"
+                  placeholder="Create your password"
+                  required
+                />
+                <button type="button" onClick={() => setShow(!show)} className="absolute right-4 top-3 text-slate-500">
+                  {show ? <FaEyeSlash /> : <PiEyesBold />}
+                </button>
+              </div>
+            </div>
 
-                      <div className="relative">
-                        <input
-                          type={show ? "text" : "password"}
-                          name="password"
-                          className="input input-bordered w-full"
-                          placeholder="Password"
-                          required
-                        />
+            <label className="flex items-center gap-2 text-sm text-slate-600">
+              <input type="checkbox" name="terms" className="checkbox checkbox-sm" />
+              Accept Terms and Conditions
+            </label>
+            {error && <p className="text-sm text-red-500">{error}</p>}
 
-                        <button
-                          type="button"
-                          onClick={() => setShow(!show)}
-                          className="absolute top-3 right-4"
-                        >
-                          {show ? <FaEyeSlash /> : <PiEyesBold />}
-                        </button>
-                      </div>
-                      
-                    </div>
-                    <div>
-                      <label class="label text-black font-semibold">
-                          <input type="checkbox" name='terms'  class="checkbox" />
-                          Accept Our <span className="text-blue-500 hover:text-blue-900">terms</span> and <span className="text-blue-500 hover:text-blue-900">Conditions</span>
-                      </label>
-                      {
-                         error && <p className='text-red-400'>{error}</p>
-                      }
-
-                  </div>
-
-                  
-
-                    <button
-                      type="submit"
-                      className="btn bg-blue-700 hover:bg-blue-900 text-white w-full"
-                    >
-                      Sign Up
-                    </button>
-                  {
-                  success && <p className='text-green-400'> {success}</p>
-                  }
-                  <p className="text-center"><hr /></p>
+            <button type="submit" className="w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700">
+              Sign Up
+            </button>
+            {success && <p className="text-sm text-emerald-600">{success}</p>}
           </form>
 
           <div className="pt-5">
-            <button onClick={handlegoogleSignIn} className="btn w-full">
+            <button
+              onClick={handlegoogleSignIn}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white py-2.5 font-medium text-slate-700 transition hover:bg-slate-50"
+            >
               <FcGoogle />
-              Sign In With Google
+              Sign in with Google
             </button>
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs md:text-sm text-gray-300 flex flex-wrap justify-center gap-4 px-4 text-center">
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 flex-wrap justify-center gap-4 px-4 text-center text-xs text-indigo-100/80 md:text-sm">
         <span>Terms of Service</span>
         <span>Privacy Policy</span>
-        <span>Dhaka Privacy Policy</span>
+        <span>Cookie Policy</span>
       </div>
-    </motion.div>
+    </Motion.div>
   );
 };
 

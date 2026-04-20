@@ -1,185 +1,204 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router";
+import { motion as Motion } from "framer-motion";
 
-const AppCategory = ({ icon, label, amount, type }) => (
-  <div className="flex items-center justify-between p-2 rounded-lg border border-gray-100 hover:bg-gray-50 transition cursor-default">
-    <div className="flex items-center gap-2">
-      <span className="text-lg">{icon}</span>
-      <span className="font-semibold text-gray-800 text-sm">{label}</span>
-    </div>
-    <div className={`px-3 py-1 rounded-full text-[10px] font-bold ${type === 'amount' ? 'text-green-700 bg-green-100' : 'text-blue-700 bg-blue-100'}`}>
-      {type === 'amount' ? amount : 'Review'}
-    </div>
-  </div>
-);
+const insightCards = [
+  { label: "Monthly Income", value: 7480, prefix: "$", accent: "text-emerald-600" },
+  { label: "Smart Savings", value: 1920, prefix: "$", accent: "text-indigo-600" },
+  { label: "Goal Progress", value: 82, suffix: "%", accent: "text-violet-600" },
+];
 
-const Hero = () => {
-  const billsConfig = [
-    { top: '15%', left: '30%', rotate: -20, delay: '0s' },
-    { top: '30%', left: '28%', rotate: 15, delay: '1s' },
-    { top: '15%', left: '70%', rotate: -35, delay: '2s' },
-    { top: '38%', left: '65%', rotate: -15, delay: '0.5s' },
-    { top: '68%', left: '25%', rotate: 15, delay: '1.5s' },
-    { top: '78%', left: '65%', rotate: -5, delay: '3s' },
-    { top: '50%', left: '62%', rotate: -5, delay: '3.5s' },
-    { top: '50%', left: '25%', rotate: -5, delay: '1.2s' },
-    { top: '2%', left: '50%', rotate: -5, delay: '0.8s' },
-    { top: '85%', left: '40%', rotate: -5, delay: '2.5s' }
-  ];
+const CountUpValue = ({ value, prefix = "", suffix = "" }) => {
+  const [displayValue, setDisplayValue] = useState(0);
 
+  useEffect(() => {
+    let start = 0;
+    const duration = 1200;
+    const frameMs = 16;
+    const totalFrames = Math.round(duration / frameMs);
+    const increment = value / totalFrames;
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= value) {
+        clearInterval(timer);
+        setDisplayValue(value);
+      } else {
+        setDisplayValue(start);
+      }
+    }, frameMs);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  const formatted =
+    value >= 1000
+      ? Math.round(displayValue).toLocaleString("en-US")
+      : Math.round(displayValue);
 
   return (
-  <section className="relative w-full min-h-screen bg-[#4C3BFF] overflow-hidden text-white flex items-center py-12 lg:py-0">
-    {/* Animation Styles */}
-    <style>{`
-      @keyframes float {
-        0%, 100% { transform: translateY(0) rotate(var(--base-rotation)); }
-        50% { transform: translateY(-20px) rotate(calc(var(--base-rotation) + 2deg)); }
-      }
+    <span>
+      {prefix}
+      {formatted}
+      {suffix}
+    </span>
+  );
+};
 
-      @keyframes phoneEntry {
-        0%, 100% {
-          transform: rotateX(10deg) rotateY(-10deg) rotateZ(8deg) translateZ(0px) translateY(0px);
-        }
-        50% {
-          transform: rotateX(15deg) rotateY(-5deg) rotateZ(6deg) translateZ(40px) translateY(20px);
-        }
-      }
+const Hero = () => {
+  return (
+    <section className="relative overflow-hidden bg-linear-to-b from-[#0f1d63] via-[#1e2f8a] to-[#2f47b6] text-white">
+      <div className="pointer-events-none absolute -left-20 top-20 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-24 bottom-16 h-80 w-80 rounded-full bg-fuchsia-400/20 blur-3xl" />
 
-      .animate-float {
-        animation: float 6s ease-in-out infinite;
-        --base-rotation: 0deg;
-      }
+      <div className="mx-auto grid min-h-[88vh] w-11/12 max-w-7xl items-center gap-12 py-14 lg:grid-cols-2 lg:py-16">
+        <Motion.div
+          initial={{ opacity: 0, y: 26 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-8"
+        >
+          <Motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-cyan-100 backdrop-blur"
+          >
+            <span className="relative inline-flex h-3 w-3 items-center justify-center">
+              <span className="absolute h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.7)]" />
+              <Motion.span
+                className="absolute h-3.5 w-3.5 rounded-full border border-cyan-200/60"
+                animate={{ opacity: [0.2, 0.7, 0.2], scale: [0.8, 1, 0.8] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <Motion.span
+                className="absolute h-5.5 w-5.5 rounded-full border border-cyan-100/35"
+                animate={{ opacity: [0.1, 0.45, 0.1], scale: [0.8, 1, 0.8] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 0.25 }}
+              />
+            </span>
+            Smarter budgeting starts here
+          </Motion.div>
 
-      .animate-phone-3d {
-        animation: phoneEntry 8s ease-in-out infinite;
-        transform-style: preserve-3d;
-      }
-    `}</style>
-
-    {/* Background Curves */}
-    <div className="absolute inset-0 pointer-events-none">
-      <svg
-        className="absolute bottom-0 left-0 w-full h-full"
-        viewBox="0 0 1440 800"
-        preserveAspectRatio="none"
-      >
-        <path fill="#2DD4BF" d="M1000,800 L1440,800 L1440,400 Q1200,600 1000,800 Z" />
-      </svg>
-
-      <svg
-        className="absolute bottom-0 left-0 w-full h-[50%] md:h-[60%]"
-        viewBox="0 0 1440 320"
-        preserveAspectRatio="none"
-      >
-        <path fill="#F4F9DD" d="M0,320L1440,320L1440,120C1200,250 800,0 0,160Z" />
-      </svg>
-    </div>
-
-    <div className="container mx-auto px-4 sm:px-6 lg:px-16 relative z-10">
-      <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-
-        {/* Left Side */}
-        <div className="w-full lg:w-1/2 text-center lg:text-left space-y-6">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.95] tracking-tight">
-            Bad at money?
-            <br />
-            <span>FinPilot can help.</span>
-          </h1>
-
-          <p className="text-lg sm:text-xl lg:text-2xl text-white/80 font-medium italic">
-            Start your free trial and get good at money.
-          </p>
-
-          <div className="pt-2">
-            <button className="bg-[#b4f05a] text-[#161c5f] font-black text-base sm:text-lg lg:text-xl px-6 sm:px-8 py-4 rounded-xl transition-all hover:scale-105">
-              Start Your Free Trial
-            </button>
-
-            <p className="text-xs sm:text-sm text-white/60 mt-4">
-              It's easy! No credit card required.
+          <div className="space-y-5">
+            <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
+              Take control of your money
+              <span className="block bg-linear-to-r from-cyan-300 to-lime-300 bg-clip-text text-transparent">
+                without the stress.
+              </span>
+            </h1>
+            <p className="max-w-xl text-base text-indigo-100/90 sm:text-lg">
+              FinPilot gives you clear budgets, live spending insights, and an
+              actionable plan so every taka has a purpose.
             </p>
           </div>
-        </div>
 
-        {/* Right Side */}
-        <div className="relative w-full lg:w-1/2 min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center justify-center [perspective:1000px]">
-
-          {/* Floating Bills */}
-          {billsConfig.slice(0, window.innerWidth < 640 ? 4 : billsConfig.length).map((bill, index) => (
-            <div
-              key={index}
-              className="absolute animate-float z-20 hidden sm:block"
-              style={{
-                top: bill.top,
-                left: bill.left,
-                animationDelay: bill.delay,
-                '--base-rotation': `${bill.rotate}deg`
-              }}
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              to="/auth/registration"
+              className="rounded-xl bg-lime-300 px-6 py-3 text-sm font-bold text-[#12215f] transition hover:-translate-y-0.5 hover:bg-lime-200"
             >
-              <div className="w-12 sm:w-14 md:w-16 h-8 sm:h-9 md:h-10 bg-[#C1FF72] rounded-lg border-[3px] border-[#2D5A27] font-black text-[#2D5A27] flex items-center justify-center text-lg shadow-xl">
-                $
-              </div>
-            </div>
-          ))}
-
-          {/* Phone */}
-          <div className="animate-phone-3d relative w-56 sm:w-64 md:w-72 h-[420px] sm:h-[500px] md:h-[560px] bg-[#31388D] p-3 rounded-[35px] sm:rounded-[40px] shadow-2xl z-10">
-            <div className="w-full h-full bg-white rounded-[28px] sm:rounded-[35px] overflow-hidden flex flex-col">
-
-              <div className="p-4 sm:p-6 pb-2">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-xl sm:text-2xl font-black text-[#31388D]">
-                    Home
-                  </span>
-                  <div className="w-7 h-7 rounded-full bg-gray-100" />
-                </div>
-
-                <div className="space-y-2">
-                  <AppCategory label="4 New Transactions" type="review" />
-                  <AppCategory label="$1,000 Ready to Assign" type="review" />
-                </div>
-              </div>
-
-              <div className="flex-1 bg-gray-50/50 p-4 sm:p-6 space-y-3">
-                <div className="font-bold text-[10px] text-gray-400 uppercase tracking-widest">
-                  Top Priorities
-                </div>
-
-                <AppCategory icon="🛒" label="Groceries" amount="$450.00" type="amount" />
-                <AppCategory icon="💞" label="Date nights" amount="$100.00" type="amount" />
-                <AppCategory icon="🍽️" label="Dining out" amount="$125.00" type="amount" />
-
-                <div className="font-bold text-[10px] text-gray-400 uppercase tracking-widest mt-4">
-                  Summary
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-                    <div className="text-[10px] text-gray-400">Spent</div>
-                    <div className="font-bold text-xs">$1,200</div>
-                  </div>
-
-                  <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm">
-                    <div className="text-[10px] text-gray-400">Goals</div>
-                    <div className="font-bold text-xs">85%</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="h-14 sm:h-16 border-t border-gray-100 flex justify-around items-center px-4 bg-white">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="w-5 h-5 sm:w-6 sm:h-6 rounded bg-gray-100" />
-                ))}
-              </div>
-            </div>
+              Start Free Trial
+            </Link>
+            <button className="rounded-xl border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20">
+              See How It Works
+            </button>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-);
 
- 
+          <Motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.25, duration: 0.6 }}
+            className="grid grid-cols-2 gap-4 pt-2 sm:grid-cols-3"
+          >
+            <div className="rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+              <p className="text-xs uppercase tracking-wide text-cyan-100/80">
+                Active users
+              </p>
+              <p className="mt-1 text-xl font-bold">25K+</p>
+            </div>
+            <div className="rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+              <p className="text-xs uppercase tracking-wide text-cyan-100/80">
+                Avg. savings
+              </p>
+              <p className="mt-1 text-xl font-bold">32%</p>
+            </div>
+            <div className="col-span-2 rounded-xl border border-white/15 bg-white/10 p-4 backdrop-blur sm:col-span-1">
+              <p className="text-xs uppercase tracking-wide text-cyan-100/80">
+                Trusted rating
+              </p>
+              <p className="mt-1 text-xl font-bold">4.9 / 5</p>
+            </div>
+          </Motion.div>
+        </Motion.div>
+
+        <Motion.div
+          initial={{ opacity: 0, x: 24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7 }}
+          className="relative mx-auto w-full max-w-md lg:max-w-lg"
+        >
+          <div className="absolute -left-8 top-16 hidden h-24 w-24 rounded-2xl bg-cyan-300/20 blur-2xl sm:block" />
+          <div className="absolute -right-8 bottom-10 hidden h-24 w-24 rounded-2xl bg-lime-300/20 blur-2xl sm:block" />
+
+          <Motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+            className="rounded-3xl border border-white/20 bg-white/95 p-5 text-slate-800 shadow-2xl transition-colors dark:bg-[#162447]/95 dark:text-slate-100 sm:p-6"
+          >
+            <div className="mb-6 flex items-center justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
+                  Dashboard
+                </p>
+                <h3 className="text-xl font-extrabold text-slate-900 dark:text-white">
+                  April Budget
+                </h3>
+              </div>
+              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                On Track
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {insightCards.map((item) => (
+                <div
+                  key={item.label}
+                  className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
+                >
+                  <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                    {item.label}
+                  </p>
+                  <p className={`text-base font-extrabold ${item.accent}`}>
+                    <CountUpValue value={item.value} prefix={item.prefix} suffix={item.suffix} />
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 rounded-2xl bg-linear-to-r from-[#eef3ff] to-[#f4f9ff] p-4 dark:from-slate-800 dark:to-slate-900">
+              <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-300">
+                <span>Needs</span>
+                <span>
+                  <CountUpValue value={76} suffix="%" />
+                </span>
+              </div>
+              <div className="h-2.5 rounded-full bg-slate-200 dark:bg-slate-700">
+                <Motion.div
+                  className="h-2.5 rounded-full bg-linear-to-r from-indigo-500 to-cyan-400"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "76%" }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
+                />
+              </div>
+              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+                You are staying under your weekly spending target. Great work.
+              </p>
+            </div>
+          </Motion.div>
+        </Motion.div>
+      </div>
+    </section>
+  );
 };
 
 export default Hero;
