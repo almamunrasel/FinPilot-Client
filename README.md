@@ -1,7 +1,6 @@
 # FinEase — Personal Finance Management App
 
-### 🌐 Live Site: [https://finease-app.netlify.app](https://finease-app.netlify.app)
-### 🔗 Backend API: [https://finease-server.vercel.app](https://finease-server.vercel.app)
+### 🌐 Live Site: https://transaction-client-livid.vercel.app/
 
 ---
 
