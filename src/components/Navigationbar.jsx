@@ -6,9 +6,6 @@ import { toast } from "react-toastify";
 import { useTheme } from "../context/ThemeProvider";
 
 
-
-
-
 const Navigationbar = () => {
   const { user, logOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -17,6 +14,11 @@ const Navigationbar = () => {
     logOut();
     toast.success("You are logged out!");
   };
+
+  const userLabel =
+    user?.name ||
+    user?.displayName ||
+    (user?.email ? user.email.split("@")[0] : "User");
 
   const navClass = ({ isActive }) =>
     `rounded-lg px-3 py-2 text-sm font-semibold transition ${
@@ -106,12 +108,12 @@ const Navigationbar = () => {
               <label tabIndex={0} className="cursor-pointer">
                 <div className="flex items-center gap-3 rounded-lg px-2 py-1 transition-colors duration-200 hover:bg-white/10">
                   <span className="hidden max-w-28 truncate text-sm font-medium text-white md:block">
-                    {user?.displayName || "User"}
+                    {userLabel}
                   </span>
                   <div className="relative">
                     <img
                       src={user.photoURL ? user.photoURL : userIcon}
-                      alt={user?.displayName || "User avatar"}
+                      alt={`${userLabel} avatar`}
                       className="h-9 w-9 rounded-full border-2 border-[#b4f05a] object-cover transition-transform duration-200 hover:scale-105"
                     />
                     <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#161c5f] bg-green-400" />

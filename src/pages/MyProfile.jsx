@@ -27,11 +27,11 @@ const MyProfile = () => {
           </div>
 
           <div className="px-6 pb-8 pt-0 md:px-10">
-            <div className="-mt-14 flex justify-center">
+            <div className="relative z-30 -mt-14 flex justify-center">
               <img
                 src={myData.photoURL}
                 alt="Profile"
-                className="h-28 w-28 rounded-full border-4 border-white bg-slate-100 object-cover object-top shadow-lg dark:border-slate-900"
+                className="relative z-30 h-28 w-28 rounded-full border-4 border-white bg-slate-100 object-contain p-1 shadow-lg dark:border-slate-900"
               />
             </div>
 
