@@ -1,4 +1,4 @@
-# FinEase — Personal Finance Management App
+# FinPilot — Personal Finance Management App
 
 ### 🌐 Live Site: https://transaction-client-livid.vercel.app/
 
@@ -6,7 +6,7 @@
 
 ## 📌 About The Project
 
-**FinEase** is a full-stack personal finance management web application that helps users take control of their money. Users can record income and expense transactions, view financial summaries, track spending by category, and get insightful reports with beautiful charts — all from a clean, responsive dashboard.
+**FinPilot** is a full-stack personal finance management web application that helps users take control of their money. Users can record income and expense transactions, view financial summaries, track spending by category, and get insightful reports with beautiful charts — all from a clean, responsive dashboard.
 
 ---
 
